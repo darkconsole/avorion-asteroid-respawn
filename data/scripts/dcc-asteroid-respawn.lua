@@ -24,8 +24,8 @@ require("randomext")
 local AsteroidRespawn = {
 	-- configuration settings --
 
-	Timer  = 3600, -- asteroids respawn time in seconds
-	Drift  = 900,  -- asteroid respawn randomiser, should be smaller than Timer
+	Timer  = 43200, -- asteroids respawn time in seconds
+	Drift  = 7200,  -- asteroid respawn randomiser, should be smaller than Timer
 
 	-- not config setting dont fuck with these --
 
@@ -144,6 +144,7 @@ AsteroidRespawn:OnDestroyed(EntityID, KillerID)
 -- sector and then trigger a new one to spawn.
 
 	local Object = self.Sector:getEntity(EntityID)
+	local Delay = (self.Timer + random():getInt((self.Drift * -1),(self.Drift)))
 
 	--------
 	-- only work on asteroids
@@ -157,8 +158,10 @@ AsteroidRespawn:OnDestroyed(EntityID, KillerID)
 	-- Timer +/- Drift
 	--------
 
+	print("asteroid to respawn in " .. Delay .. " seconds.")
+
 	deferredCallback(
-		(self.Timer + random():getInt((self.Drift * -1),(self.Drift))),
+		Delay,
 		"AsteroidRespawnCallback_OnRespawn",
 		Object.position
 	)
@@ -167,6 +170,7 @@ AsteroidRespawn:OnDestroyed(EntityID, KillerID)
 	-- then delete the old one
 	--------
 
+	print("asteroid destroyed")
 	self.Sector:deleteEntity(Object)
 	return
 end
@@ -191,7 +195,7 @@ AsteroidRespawn:GetBlockPlan()
 
 	return self.Generator.makeSmallAsteroidPlan(
 		random():getInt(
-			random():getInt(2,6),
+			random():getInt(3,6),
 			random():getInt(10,15)
 		),
 		1,
