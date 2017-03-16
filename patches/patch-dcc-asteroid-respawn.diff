@@ -1,6 +1,6 @@
---- "..\\avorion-0.10.2\\data\\scripts\\dcc-asteroid-respawn.lua"	1969-12-31 18:00:00.000000000 -0600
-+++ "..\\avorion-asteroid-respawn\\data\\scripts\\dcc-asteroid-respawn.lua"	2017-03-14 19:37:42.524896800 -0500
-@@ -0,0 +1,216 @@
+--- ../avorion-0.10.5/data/scripts/dcc-asteroid-respawn.lua	1969-12-31 18:00:00.000000000 -0600
++++ ../avorion-asteroid-respawn/data/scripts/dcc-asteroid-respawn.lua	2017-03-15 00:13:36.824444300 -0500
+@@ -0,0 +1,220 @@
 +if onServer() then
 +
 +--------------------------------------------------------------------------------
@@ -27,8 +27,8 @@
 +local AsteroidRespawn = {
 +	-- configuration settings --
 +
-+	Timer  = 3600, -- asteroids respawn time in seconds
-+	Drift  = 900,  -- asteroid respawn randomiser, should be smaller than Timer
++	Timer  = 43200, -- asteroids respawn time in seconds
++	Drift  = 7200,  -- asteroid respawn randomiser, should be smaller than Timer
 +
 +	-- not config setting dont fuck with these --
 +
@@ -147,6 +147,7 @@
 +-- sector and then trigger a new one to spawn.
 +
 +	local Object = self.Sector:getEntity(EntityID)
++	local Delay = (self.Timer + random():getInt((self.Drift * -1),(self.Drift)))
 +
 +	--------
 +	-- only work on asteroids
@@ -160,8 +161,10 @@
 +	-- Timer +/- Drift
 +	--------
 +
++	print("asteroid to respawn in " .. Delay .. " seconds.")
++
 +	deferredCallback(
-+		(self.Timer + random():getInt((self.Drift * -1),(self.Drift))),
++		Delay,
 +		"AsteroidRespawnCallback_OnRespawn",
 +		Object.position
 +	)
@@ -170,6 +173,7 @@
 +	-- then delete the old one
 +	--------
 +
++	print("asteroid destroyed")
 +	self.Sector:deleteEntity(Object)
 +	return
 +end
@@ -194,7 +198,7 @@
 +
 +	return self.Generator.makeSmallAsteroidPlan(
 +		random():getInt(
-+			random():getInt(2,6),
++			random():getInt(3,6),
 +			random():getInt(10,15)
 +		),
 +		1,
