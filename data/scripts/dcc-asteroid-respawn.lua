@@ -1,11 +1,26 @@
-if onServer() then
+--------------------------------------------------------------------------------
+-- ASTEROID RESPAWNING ---------------------------------------------------------
+--------------------------------------------------------------------------------
+-- darkconsole <darkcee.legit@gmail.com> ---------------------------------------
+
+--[[ SEE README.MD FOR DETAILS YO ]]--
+
+--------------------------------------------------------------------------------
+-- STOCK FILE MODIFICATIONS ----------------------------------------------------
+--------------------------------------------------------------------------------
+
+-- none
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
---------------------------------------------------------------------------------
 
--- vscode-fold=1
+if onServer()
+then
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 package.path = package.path
 .. ";data/scripts/lib/?.lua"
@@ -15,33 +30,57 @@ package.path = package.path
 require("galaxy")
 require("utility")
 require("randomext")
--- require("stringutility")
--- require("goods")
 
 --------------------------------------------------------------------------------
+-- MOD CONFIG ------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
 local AsteroidRespawn = {
+	--------
 	-- configuration settings --
+	--------
 
 	Timer  = 43200, -- asteroids respawn time in seconds
 	Drift  = 7200,  -- asteroid respawn randomiser, should be smaller than Timer
 
+	--------
 	-- not config setting dont fuck with these --
+	--------
 
-	Sector = nil,
-	Generator = require("plangenerator"),
+	Sector     = nil,
+	Generator  = require("plangenerator"),
 	CountFound = 0,
-	CountBound = 0
+	CountBound = 0,
+
+	-- testing an idea by Toriath to solve my client loading lock issue. do not
+	-- allow the script to reinit itself.
+	Init       = false,
+
+	-- testing an idea to solve my client loading lock issue. put the real init
+	-- on delay. this value is in seconds. i am noticing that there seems to
+	-- be a few sector changing glitches where the neutral sector and the
+	-- object detector both print messages after jumping before the load screen
+	-- even happens, wondering if it could be bothering this.
+	InitDelay  = 30
 }
 
+--------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
 function
 initialize()
-	AsteroidRespawn:BindToSector(Sector())
-	print(">> script added")
+-- called by the server automatically when the script is loaded, or when the
+-- sector is first jumped into for a while.
+
+	if(not AsteroidRespawn.Init)
+	then
+		deferredCallback(
+			AsteroidRespawn.InitDelay,
+			"AsteroidRespawnCallback_OnInit"
+		)
+	end
+
 	return
 end
 
@@ -55,6 +94,19 @@ terminate()
 	-- my sectors exploded as i constantly did removeScript/addScript over and
 	-- over and over.
 
+	return
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+function
+AsteroidRespawnCallback_OnInit()
+-- have not quite figured out how to make "AsteroidRespawn:OnInit" work for the
+-- callback name.
+
+	AsteroidRespawn:BindToSector(Sector())
 	return
 end
 
@@ -78,6 +130,7 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 function
 AsteroidRespawn:BindToSector(CurrentSector)
@@ -93,6 +146,7 @@ AsteroidRespawn:BindToSector(CurrentSector)
 	local Asteroid
 	local Asteroids
 
+	self.Init = true
 	self.Sector = CurrentSector
 	self.CountFound = 0
 	self.CountBound = 0
@@ -114,8 +168,6 @@ AsteroidRespawn:BindToSector(CurrentSector)
 		self.CountFound = self.CountFound + 1
 	end
 
-	--------
-	--------
 
 	print(
 		">> respawn script attached to " ..
@@ -212,7 +264,6 @@ AsteroidRespawn:GetAcceptableMaterial()
 	))
 end
 
---------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
