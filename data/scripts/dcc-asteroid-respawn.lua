@@ -61,7 +61,7 @@ local AsteroidRespawn = {
 	-- be a few sector changing glitches where the neutral sector and the
 	-- object detector both print messages after jumping before the load screen
 	-- even happens, wondering if it could be bothering this.
-	InitDelay  = 30
+	InitDelay  = 1
 }
 
 --------------------------------------------------------------------------------
