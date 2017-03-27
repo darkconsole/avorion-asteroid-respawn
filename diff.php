@@ -7,7 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 define('ProjectRoot','..');
-define('StockDir', '/avorion-0.10.5/data/scripts');
+define('StockDir', '/avorion-0.11.0.7844/data/scripts');
 define('ModDir', '/avorion-asteroid-respawn/data/scripts');
 define('PatchDir', '/avorion-asteroid-respawn/patches');
 
@@ -40,7 +40,7 @@ $Command;
 
 foreach(Files as $File => $Patch) {
 	$Command = sprintf(
-		'diff -urN %s %s > %s',
+		'diff -urN --strip-trailing-cr %s %s > %s',
 		escapeshellarg((ProjectRoot.StockDir.$File)),
 		escapeshellarg((ProjectRoot.ModDir.$File)),
 		escapeshellarg(Pathify(ProjectRoot.PatchDir.$Patch))

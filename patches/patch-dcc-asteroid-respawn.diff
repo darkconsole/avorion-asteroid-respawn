@@ -1,4 +1,4 @@
---- ../avorion-0.10.5/data/scripts/dcc-asteroid-respawn.lua	1969-12-31 18:00:00.000000000 -0600
+--- ../avorion-0.11.0.7844/data/scripts/dcc-asteroid-respawn.lua	1969-12-31 18:00:00.000000000 -0600
 +++ ../avorion-asteroid-respawn/data/scripts/dcc-asteroid-respawn.lua	2017-03-23 18:19:33.000000000 -0500
 @@ -0,0 +1,271 @@
 +--------------------------------------------------------------------------------
