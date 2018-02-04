@@ -1,0 +1,13 @@
+--- ../avorion-stock/data/scripts/commands/arespawn.lua	1969-12-31 18:00:00.000000000 -0600
++++ ../avorion-asteroid-respawn/data/scripts/commands/arespawn.lua	2018-02-04 15:36:07.689318000 -0600
+@@ -0,0 +1,10 @@
++
++function execute(sender, commandName, action, ...)
++
++	if(OnServer())
++	then
++		Sector():addScript("dcc-asteroid-respawn")
++	end
++
++	return 0, "", ""
++end

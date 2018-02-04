@@ -7,12 +7,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 define('ProjectRoot','..');
-define('StockDir', '/avorion-0.11.0.7844/data/scripts');
+define('StockDir', '/avorion-stock/data/scripts');
 define('ModDir', '/avorion-asteroid-respawn/data/scripts');
 define('PatchDir', '/avorion-asteroid-respawn/patches');
 
 define('Files',[
-	'/dcc-asteroid-respawn.lua' => '/patch-dcc-asteroid-respawn.diff'
+	'/lib/dcc-asteroid-respawn/main.lua' => '/patch-lib-dcc-asteroid-respawn-main.diff',
+	'/commands/arespawn.lua'             => '/patch-commmands-arespawn-diff'
 ]);
 
 ////////////////////////////////////////////////////////////////////////////////
